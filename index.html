@@ -3,488 +3,182 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Уголовные документы адвоката</title>
+<title>Конструктор уголовного документа</title>
 <style>
-  body{
-    font-family:"Times New Roman",serif;
-    background:#fff;
-    color:#000;
-    margin:0;
-    padding:24px;
-  }
-  .wrap{
-    max-width:1000px;
-    margin:0 auto;
-  }
-  h1{
-    text-align:center;
-    margin:0 0 24px 0;
-    font-size:30px;
-  }
-  .box{
-    border:1px solid #cfcfcf;
-    border-radius:8px;
-    padding:18px;
-    margin-bottom:22px;
-    background:#fafafa;
-  }
-  .grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px 18px;
-  }
-  .full{
-    grid-column:1 / -1;
-  }
-  label{
-    display:block;
-    font-weight:bold;
-    margin-bottom:6px;
-  }
-  input, select, textarea{
-    width:100%;
-    box-sizing:border-box;
-    padding:10px;
-    font-family:"Times New Roman",serif;
-    font-size:16px;
-    border:1px solid #999;
-    border-radius:4px;
-    background:#fff;
-  }
-  textarea{
-    min-height:120px;
-    resize:vertical;
-  }
-  .btns{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin-top:8px;
-  }
-  button{
-    padding:12px 18px;
-    font-family:"Times New Roman",serif;
-    font-size:16px;
-    border:1px solid #666;
-    border-radius:4px;
-    background:#f1f1f1;
-    cursor:pointer;
-  }
-  button:hover{
-    background:#e6e6e6;
-  }
-  .preview-title{
-    font-size:22px;
-    font-weight:bold;
-    margin-bottom:14px;
-  }
-  #preview{
-    white-space:pre-wrap;
-    line-height:1.5;
-    text-align:justify;
-    background:#fff;
-    border:1px solid #ccc;
-    padding:20px;
-    min-height:260px;
-  }
-  .mini{
-    font-size:14px;
-    color:#444;
-    margin-top:4px;
-  }
-  @media (max-width:780px){
-    .grid{
-      grid-template-columns:1fr;
-    }
-  }
+body{
+  font-family:"Times New Roman", serif;
+  max-width:900px;
+  margin:auto;
+  padding:40px;
+  background:#fff;
+  color:#000;
+}
+h1{
+  text-align:center;
+  margin-bottom:30px;
+}
+label{
+  display:block;
+  font-weight:bold;
+  margin:12px 0 6px;
+}
+input, textarea, select{
+  width:100%;
+  box-sizing:border-box;
+  padding:8px;
+  font-family:"Times New Roman", serif;
+  font-size:16px;
+}
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+button{
+  padding:12px 18px;
+  margin:16px 10px 0 0;
+  font-size:16px;
+  cursor:pointer;
+}
+#preview{
+  margin-top:30px;
+  border-top:1px solid #aaa;
+  padding-top:20px;
+  white-space:pre-wrap;
+  line-height:1.5;
+}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>Уголовные документы адвоката</h1>
 
-  <div class="box">
-    <div class="grid">
-      <div class="full">
-        <label for="docType">Вид документа</label>
-        <select id="docType" onchange="applyDocPreset()">
-          <option value="appeal_verdict">Апелляционная жалоба на приговор суда</option>
-          <option value="appeal_detention">Апелляционная жалоба на постановление об избрании меры пресечения в виде заключения под стражу</option>
-          <option value="appeal_extend_detention">Апелляционная жалоба на постановление о продлении срока содержания под стражей</option>
-          <option value="complaint_125">Жалоба в порядке статьи 125 УПК РФ</option>
-          <option value="motion_investigator">Ходатайство следователю</option>
-          <option value="motion_court">Ходатайство в суд</option>
-          <option value="complaint_prosecutor">Жалоба прокурору</option>
-          <option value="motion_attach">Ходатайство о приобщении документов</option>
-          <option value="motion_acquaint">Ходатайство об ознакомлении с материалами</option>
-          <option value="speech_debate">Тезисы для прений стороны защиты</option>
-        </select>
-      </div>
+<h1>Конструктор уголовного документа</h1>
 
-      <div>
-        <label for="targetCourt">Куда подается документ</label>
-        <input id="targetCourt" list="targets" placeholder="Например: В Судебную коллегию по уголовным делам Московского городского суда">
-        <datalist id="targets">
-          <option value="В Судебную коллегию по уголовным делам Московского городского суда">
-          <option value="В районный суд">
-          <option value="Прокурору города Москвы">
-          <option value="Прокурору района">
-          <option value="Руководителю следственного органа">
-          <option value="Следователю">
-        </datalist>
-      </div>
+<label for="docType">Вид документа</label>
+<select id="docType">
+  <option value="Апелляционная жалоба на приговор суда">Апелляционная жалоба на приговор суда</option>
+  <option value="Апелляционная жалоба на заключение под стражу">Апелляционная жалоба на заключение под стражу</option>
+  <option value="Апелляционная жалоба на продление срока содержания под стражей">Апелляционная жалоба на продление срока содержания под стражей</option>
+  <option value="Жалоба в порядке статьи 125 УПК РФ">Жалоба в порядке статьи 125 УПК РФ</option>
+</select>
 
-      <div>
-        <label for="targetAddress">Адрес адресата</label>
-        <input id="targetAddress" placeholder="Например: 107076, г. Москва, Богородский вал, д. 8">
-      </div>
+<label for="court">Куда подается</label>
+<input id="court" placeholder="Например: В Судебную коллегию по уголовным делам Московского городского суда">
 
-      <div>
-        <label for="throughCourt">Через какой суд / орган</label>
-        <input id="throughCourt" list="moscowCourts" placeholder="Например: через Тушинский районный суд г. Москвы">
-        <datalist id="moscowCourts">
-          <option value="через Басманный районный суд г. Москвы">
-          <option value="через Бабушкинский районный суд г. Москвы">
-          <option value="через Бутырский районный суд г. Москвы">
-          <option value="через Гагаринский районный суд г. Москвы">
-          <option value="через Головинский районный суд г. Москвы">
-          <option value="через Дорогомиловский районный суд г. Москвы">
-          <option value="через Замоскворецкий районный суд г. Москвы">
-          <option value="через Зеленоградский районный суд г. Москвы">
-          <option value="через Зюзинский районный суд г. Москвы">
-          <option value="через Измайловский районный суд г. Москвы">
-          <option value="через Коптевский районный суд г. Москвы">
-          <option value="через Кузьминский районный суд г. Москвы">
-          <option value="через Кунцевский районный суд г. Москвы">
-          <option value="через Лефортовский районный суд г. Москвы">
-          <option value="через Люблинский районный суд г. Москвы">
-          <option value="через Мещанский районный суд г. Москвы">
-          <option value="через Мещанский районный суд г. Москвы">
-          <option value="через Мосгорсуд">
-          <option value="через Нагатинский районный суд г. Москвы">
-          <option value="через Никулинский районный суд г. Москвы">
-          <option value="через Останкинский районный суд г. Москвы">
-          <option value="через Перовский районный суд г. Москвы">
-          <option value="через Преображенский районный суд г. Москвы">
-          <option value="через Пресненский районный суд г. Москвы">
-          <option value="через Савеловский районный суд г. Москвы">
-          <option value="через Симоновский районный суд г. Москвы">
-          <option value="через Солнцевский районный суд г. Москвы">
-          <option value="через Таганский районный суд г. Москвы">
-          <option value="через Тверской районный суд г. Москвы">
-          <option value="через Тимирязевский районный суд г. Москвы">
-          <option value="через Троицкий районный суд г. Москвы">
-          <option value="через Тушинский районный суд г. Москвы">
-          <option value="через Хамовнический районный суд г. Москвы">
-          <option value="через Хорошевский районный суд г. Москвы">
-          <option value="через Черемушкинский районный суд г. Москвы">
-          <option value="через Чертановский районный суд г. Москвы">
-          <option value="через Щербинский районный суд г. Москвы">
-        </datalist>
-      </div>
+<label for="throughCourt">Через какой суд / орган</label>
+<input id="throughCourt" placeholder="Например: через Тушинский районный суд г. Москвы">
 
-      <div>
-        <label for="caseNumber">Номер дела / материала</label>
-        <input id="caseNumber" placeholder="Например: 1-123/2026">
-      </div>
+<label for="defendant">ФИО подзащитного / заявителя</label>
+<input id="defendant" placeholder="Например: Иванов Иван Иванович">
 
-      <div>
-        <label for="clientName">ФИО подзащитного / заявителя</label>
-        <input id="clientName" placeholder="Например: Иванов Иван Иванович">
-      </div>
+<label for="caseNumber">Номер дела / материала</label>
+<input id="caseNumber" placeholder="Например: 1-123/2026">
 
-      <div>
-        <label for="clientStatus">Процессуальный статус</label>
-        <input id="clientStatus" placeholder="Например: обвиняемый / подозреваемый / заявитель">
-      </div>
+<label for="text">Доводы</label>
+<textarea id="text" placeholder="Изложите доводы"></textarea>
 
-      <div class="full">
-        <label for="titleText">Заголовок документа</label>
-        <input id="titleText" placeholder="Например: на приговор Тушинского районного суда г. Москвы от 01.03.2026">
-      </div>
+<label for="request">Просительная часть</label>
+<textarea id="request" placeholder="Например: постановление отменить"></textarea>
 
-      <div class="full">
-        <label for="facts">Обстоятельства</label>
-        <textarea id="facts" placeholder="Кратко изложите обстоятельства"></textarea>
-      </div>
+<button type="button" id="fillBtn">Подставить типовой текст</button>
+<button type="button" id="genBtn">Сформировать</button>
+<button type="button" id="wordBtn">Скачать Word</button>
 
-      <div class="full">
-        <label for="arguments">Доводы</label>
-        <textarea id="arguments" placeholder="Изложите доводы"></textarea>
-      </div>
-
-      <div class="full">
-        <label for="requestText">Просительная часть</label>
-        <textarea id="requestText" placeholder="Например: постановление суда отменить, избрать более мягкую меру пресечения"></textarea>
-      </div>
-
-      <div class="full">
-        <label for="attachments">Приложения</label>
-        <textarea id="attachments" placeholder="Каждое приложение с новой строки"></textarea>
-        <div class="mini">Например: Копия ордера, копия постановления, характеристика, медицинские документы.</div>
-      </div>
-    </div>
-
-    <div class="btns">
-      <button type="button" onclick="applyDocPreset()">Подставить шаблон</button>
-      <button type="button" onclick="generateDocument()">Сформировать</button>
-      <button type="button" onclick="downloadWord()">Скачать Word</button>
-      <button type="button" onclick="copyText()">Копировать текст</button>
-      <button type="button" onclick="clearForm()">Очистить</button>
-    </div>
-  </div>
-
-  <div class="box">
-    <div class="preview-title">Предпросмотр</div>
-    <div id="preview">Нажмите «Сформировать».</div>
-  </div>
-</div>
+<div id="preview">Пока документ не сформирован.</div>
 
 <script>
-const ADVOCATE_BLOCK =
-`от адвоката Адамова Тажиба Таривердиевича
-Регистрационный номер в реестре адвокатов АП г. Москвы 77/9954
+const fillBtn = document.getElementById('fillBtn');
+const genBtn = document.getElementById('genBtn');
+const wordBtn = document.getElementById('wordBtn');
+
+fillBtn.addEventListener('click', function () {
+  const type = document.getElementById('docType').value;
+
+  if (type === 'Апелляционная жалоба на приговор суда') {
+    document.getElementById('text').value =
+`Приговор считаю незаконным, необоснованным и подлежащим отмене либо изменению.
+Выводы суда не соответствуют фактическим обстоятельствам дела.
+Судом допущены существенные нарушения уголовного и уголовно-процессуального закона.`;
+
+    document.getElementById('request').value =
+`Приговор суда отменить либо изменить.
+Принять по делу законное, обоснованное и справедливое решение.`;
+  }
+
+  if (type === 'Апелляционная жалоба на заключение под стражу') {
+    document.getElementById('text').value =
+`Постановление суда считаю незаконным и необоснованным.
+Суд не привел конкретных данных, подтверждающих невозможность применения более мягкой меры пресечения.`;
+
+    document.getElementById('request').value =
+`Постановление суда отменить.
+Избрать более мягкую меру пресечения.`;
+  }
+
+  if (type === 'Апелляционная жалоба на продление срока содержания под стражей') {
+    document.getElementById('text').value =
+`Постановление о продлении срока содержания под стражей считаю незаконным и необоснованным.
+Новых обстоятельств, оправдывающих дальнейшее содержание под стражей, судом не приведено.`;
+
+    document.getElementById('request').value =
+`Постановление суда отменить.
+Избрать более мягкую меру пресечения.`;
+  }
+
+  if (type === 'Жалоба в порядке статьи 125 УПК РФ') {
+    document.getElementById('text').value =
+`Действия (бездействие) либо решение должностного лица нарушают права заявителя и затрудняют доступ к правосудию.`;
+
+    document.getElementById('request').value =
+`Признать оспариваемые действия (бездействие) либо решение незаконными и необоснованными.
+Обязать устранить допущенное нарушение.`;
+  }
+});
+
+function buildDoc() {
+  const docType = document.getElementById('docType').value.trim();
+  const court = document.getElementById('court').value.trim();
+  const throughCourt = document.getElementById('throughCourt').value.trim();
+  const defendant = document.getElementById('defendant').value.trim();
+  const caseNumber = document.getElementById('caseNumber').value.trim();
+  const text = document.getElementById('text').value.trim();
+  const request = document.getElementById('request').value.trim();
+
+  return `${court}
+
+${throughCourt}
+
+от адвоката
+Адамова Тажиба Таривердиевича
+регистрационный номер в реестре адвокатов АП г. Москвы 77/9954
 адрес для корреспонденции: 127238, г. Москва, Дмитровское шоссе, д. 4, корп. 3, офис 101
 тел.: +7 (967) 019-78-24
-e-mail: adamovtt@yandex.ru`;
+e-mail: adamovtt@yandex.ru
 
-const presets = {
-  appeal_verdict: {
-    targetCourt: "В Судебную коллегию по уголовным делам Московского городского суда",
-    targetAddress: "107076, г. Москва, Богородский вал, д. 8",
-    titleText: "на приговор суда",
-    facts:
-`Приговором суда лицо признано виновным в совершении инкриминируемого деяния.
-С вынесенным приговором сторона защиты не согласна.`,
-    arguments:
-`Приговор является незаконным, необоснованным и подлежащим отмене либо изменению.
-Выводы суда не в полной мере соответствуют фактическим обстоятельствам дела.
-При рассмотрении дела допущены существенные нарушения уголовного и уголовно-процессуального закона.
-Доказательства оценены односторонне, доводы стороны защиты надлежащей оценки не получили.`,
-    requestText:
-`Приговор суда отменить либо изменить.
-Принять по делу законное, обоснованное и справедливое решение.`
-  },
+в интересах: ${defendant}
 
-  appeal_detention: {
-    targetCourt: "В Судебную коллегию по уголовным делам Московского городского суда",
-    targetAddress: "107076, г. Москва, Богородский вал, д. 8",
-    titleText: "на постановление суда об избрании меры пресечения в виде заключения под стражу",
-    facts:
-`Постановлением суда в отношении подзащитного избрана мера пресечения в виде заключения под стражу.
-С данным постановлением сторона защиты не согласна.`,
-    arguments:
-`Постановление суда является незаконным и необоснованным.
-Суд не привел достаточных конкретных данных, подтверждающих наличие рисков, предусмотренных статьей 97 УПК РФ.
-Не проверена возможность применения более мягкой меры пресечения.
-Выводы суда основаны на предположениях, а не на конкретных материалах.`,
-    requestText:
-`Постановление суда отменить.
-Избрать в отношении подзащитного более мягкую меру пресечения, не связанную с заключением под стражу.`
-  },
+${docType}
 
-  appeal_extend_detention: {
-    targetCourt: "В Судебную коллегию по уголовным делам Московского городского суда",
-    targetAddress: "107076, г. Москва, Богородский вал, д. 8",
-    titleText: "на постановление суда о продлении срока содержания под стражей",
-    facts:
-`Постановлением суда продлен срок содержания под стражей.
-Сторона защиты с данным решением не согласна.`,
-    arguments:
-`Постановление является незаконным и необоснованным.
-Судом не приведено новых обстоятельств, оправдывающих дальнейшее содержание лица под стражей.
-Риски, на которые ссылается сторона обвинения, носят предположительный характер и не подтверждены надлежащими материалами.
-Возможность применения более мягкой меры пресечения надлежащим образом не проверена.`,
-    requestText:
-`Постановление суда о продлении срока содержания под стражей отменить.
-Избрать более мягкую меру пресечения.`
-  },
+по делу / материалу № ${caseNumber}
 
-  complaint_125: {
-    targetCourt: "В районный суд",
-    targetAddress: "",
-    titleText: "в порядке статьи 125 УПК РФ",
-    facts:
-`В ходе досудебного производства были допущены действия (бездействие) либо принято решение, нарушающее права заявителя.`,
-    arguments:
-`Оспариваемые действия (бездействие) либо решение являются незаконными и необоснованными.
-Они нарушают права и законные интересы заявителя, затрудняют доступ к правосудию и реализацию права на защиту.
-Имеются предусмотренные законом основания для судебного контроля в порядке статьи 125 УПК РФ.`,
-    requestText:
-`Признать действия (бездействие) либо решение незаконными и необоснованными.
-Обязать соответствующее должностное лицо устранить допущенное нарушение.`
-  },
+${text}
 
-  motion_investigator: {
-    targetCourt: "Следователю",
-    targetAddress: "",
-    titleText: "ХОДАТАЙСТВО",
-    facts:
-`В производстве находится уголовное дело, по которому защита заявляет настоящее ходатайство.`,
-    arguments:
-`Настоящее ходатайство заявляется в целях обеспечения полноты, всесторонности и объективности расследования, а также реализации права на защиту.`,
-    requestText:
-`Рассмотреть настоящее ходатайство и принять решение в соответствии с требованиями УПК РФ.`
-  },
+ПРОШУ:
 
-  motion_court: {
-    targetCourt: "В районный суд",
-    targetAddress: "",
-    titleText: "ХОДАТАЙСТВО",
-    facts:
-`В производстве суда находится материал / уголовное дело, по которому заявляется настоящее ходатайство.`,
-    arguments:
-`Заявленное ходатайство имеет значение для правильного разрешения дела и обеспечения права на защиту.`,
-    requestText:
-`Удовлетворить заявленное ходатайство.`
-  },
+${request}
 
-  complaint_prosecutor: {
-    targetCourt: "Прокурору",
-    targetAddress: "",
-    titleText: "ЖАЛОБА",
-    facts:
-`Имеют место нарушения закона, допущенные должностными лицами в ходе досудебного производства.`,
-    arguments:
-`Указанные нарушения затрагивают права и законные интересы подзащитного / заявителя и требуют прокурорского реагирования.`,
-    requestText:
-`Провести проверку доводов жалобы и принять меры прокурорского реагирования.`
-  },
+Дата: ____________
 
-  motion_attach: {
-    targetCourt: "Следователю / в суд",
-    targetAddress: "",
-    titleText: "ХОДАТАЙСТВО о приобщении документов",
-    facts:
-`У стороны защиты имеются документы, имеющие значение для уголовного дела.`,
-    arguments:
-`Указанные материалы относятся к предмету доказывания и подлежат приобщению к материалам дела.`,
-    requestText:
-`Приобщить представленные документы к материалам уголовного дела.`
-  },
-
-  motion_acquaint: {
-    targetCourt: "Следователю / дознавателю",
-    targetAddress: "",
-    titleText: "ХОДАТАЙСТВО об ознакомлении с материалами",
-    facts:
-`Для надлежащей реализации права на защиту необходимо ознакомиться с материалами.`,
-    arguments:
-`Ознакомление необходимо для подготовки позиции защиты и реализации процессуальных прав.`,
-    requestText:
-`Предоставить возможность ознакомиться с материалами в установленном законом порядке.`
-  },
-
-  speech_debate: {
-    targetCourt: "В суд",
-    targetAddress: "",
-    titleText: "ТЕЗИСЫ ДЛЯ ПРЕНИЙ СТОРОНЫ ЗАЩИТЫ",
-    facts:
-`Сторона обвинения представила свою позицию по делу.`,
-    arguments:
-`Доказательства обвинения не подтверждают вывод о виновности в требуемой законом степени.
-Имеющиеся сомнения неустранимы и подлежат толкованию в пользу подсудимого.`,
-    requestText:
-`Постановить оправдательный приговор либо назначить минимально возможное наказание с учетом всех смягчающих обстоятельств.`
-  }
-};
-
-function applyDocPreset(){
-  const type = document.getElementById("docType").value;
-  const p = presets[type];
-  if(!p) return;
-
-  document.getElementById("targetCourt").value = p.targetCourt || "";
-  document.getElementById("targetAddress").value = p.targetAddress || "";
-  document.getElementById("titleText").value = p.titleText || "";
-  document.getElementById("facts").value = p.facts || "";
-  document.getElementById("arguments").value = p.arguments || "";
-  document.getElementById("requestText").value = p.requestText || "";
+Адвокат
+Адамов Т.Т.`;
 }
 
-function buildDocumentText(){
-  const targetCourt = document.getElementById("targetCourt").value.trim();
-  const targetAddress = document.getElementById("targetAddress").value.trim();
-  const throughCourt = document.getElementById("throughCourt").value.trim();
-  const caseNumber = document.getElementById("caseNumber").value.trim();
-  const clientName = document.getElementById("clientName").value.trim();
-  const clientStatus = document.getElementById("clientStatus").value.trim();
-  const titleText = document.getElementById("titleText").value.trim();
-  const facts = document.getElementById("facts").value.trim();
-  const argumentsText = document.getElementById("arguments").value.trim();
-  const requestText = document.getElementById("requestText").value.trim();
-  const attachments = document.getElementById("attachments").value.trim();
+genBtn.addEventListener('click', function () {
+  document.getElementById('preview').innerText = buildDoc();
+});
 
-  let out = "";
-
-  if(targetCourt) out += targetCourt + "\n";
-  if(targetAddress) out += targetAddress + "\n";
-  out += "\n";
-
-  if(throughCourt) out += throughCourt + "\n\n";
-
-  out += ADVOCATE_BLOCK + "\n\n";
-
-  if(clientStatus || clientName){
-    out += "в интересах: " + (clientStatus ? clientStatus + " " : "") + (clientName || "") + "\n\n";
-  }
-
-  if(titleText) out += titleText + "\n\n";
-
-  if(caseNumber) out += "по делу / материалу № " + caseNumber + "\n\n";
-
-  if(clientName) out += "В отношении: " + clientName + "\n\n";
-
-  if(facts) out += facts + "\n\n";
-  if(argumentsText) out += argumentsText + "\n\n";
-
-  out += "ПРОШУ:\n\n";
-  out += (requestText || "Разрешить вопрос в соответствии с доводами настоящего документа.") + "\n\n";
-
-  if(attachments){
-    out += "Приложение:\n" + attachments + "\n\n";
-  }
-
-  out += "Дата: ____________\n\n";
-  out += "Адвокат\nАдамов Т.Т.";
-
-  return out;
-}
-
-function generateDocument(){
-  document.getElementById("preview").innerText = buildDocumentText();
-}
-
-function copyText(){
-  const text = buildDocumentText();
-  navigator.clipboard.writeText(text).then(function(){
-    alert("Текст скопирован");
-  }).catch(function(){
-    alert("Не удалось скопировать");
-  });
-}
-
-function clearForm(){
-  document.getElementById("throughCourt").value = "";
-  document.getElementById("caseNumber").value = "";
-  document.getElementById("clientName").value = "";
-  document.getElementById("clientStatus").value = "";
-  document.getElementById("attachments").value = "";
-  applyDocPreset();
-  document.getElementById("preview").innerText = "Нажмите «Сформировать».";
-}
-
-function escapeHtml(str){
-  return str
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;");
-}
-
-function downloadWord(){
-  const plain = buildDocumentText();
-  const html =
-`<html xmlns:o="urn:schemas-microsoft-com:office:office"
+wordBtn.addEventListener('click', function () {
+  const doc = buildDoc();
+  const html = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
 xmlns:w="urn:schemas-microsoft-com:office:word"
 xmlns="http://www.w3.org/TR/REC-html40">
 <head>
@@ -492,7 +186,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
 <title>Документ</title>
 <style>
 body{
-  font-family:"Times New Roman",serif;
+  font-family:"Times New Roman", serif;
   font-size:14pt;
   line-height:1.5;
   margin:2cm 1.5cm 2cm 3cm;
@@ -500,7 +194,7 @@ body{
 }
 </style>
 </head>
-<body>${escapeHtml(plain)}</body>
+<body>${doc.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}</body>
 </html>`;
 
   const blob = new Blob(["\ufeff", html], { type: "application/msword" });
@@ -510,10 +204,8 @@ body{
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-}
-
-applyDocPreset();
-generateDocument();
+});
 </script>
+
 </body>
 </html>

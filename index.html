@@ -1,11 +1,10 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <title>Конструктор процессуального документа</title>
 
 <style>
-
 body{
 font-family:"Times New Roman";
 max-width:900px;
@@ -33,15 +32,8 @@ padding:12px 20px;
 font-size:16px;
 cursor:pointer;
 }
-
-#output{
-margin-top:40px;
-white-space:pre-wrap;
-border-top:1px solid #aaa;
-padding-top:20px;
-}
-
 </style>
+
 </head>
 
 <body>
@@ -49,10 +41,10 @@ padding-top:20px;
 <h1>Конструктор процессуального документа</h1>
 
 <label>Куда подается документ</label>
-<input id="court" placeholder="Например: В Московский городской суд">
+<input id="court">
 
 <label>Через какой суд</label>
-<input id="throughCourt" placeholder="Например: через Тверской районный суд г. Москвы">
+<input id="throughCourt">
 
 <label>ФИО подзащитного</label>
 <input id="defendant">
@@ -60,15 +52,13 @@ padding-top:20px;
 <label>Номер дела</label>
 <input id="caseNumber">
 
-<label>Содержание доводов</label>
+<label>Доводы жалобы</label>
 <textarea id="text"></textarea>
 
 <label>Просительная часть</label>
 <textarea id="request"></textarea>
 
 <button onclick="generate()">Сформировать и скачать Word</button>
-
-<div id="output"></div>
 
 <script>
 
@@ -82,10 +72,9 @@ let text=document.getElementById("text").value
 let request=document.getElementById("request").value
 
 let doc=
-
 `В ${court}
 
-${throughCourt}
+через ${throughCourt}
 
 от адвоката
 Адамова Тажиба Таривердиевича
@@ -96,11 +85,9 @@ email: adamovtt@yandex.ru
 
 АПЕЛЛЯЦИОННАЯ ЖАЛОБА
 
-
 по делу № ${caseNumber}
 
 В отношении: ${defendant}
-
 
 ${text}
 
@@ -113,8 +100,6 @@ ${request}
 Адвокат
 Адамов Т.Т.
 `
-
-document.getElementById("output").innerText=doc
 
 let blob=new Blob(['\ufeff',doc],{type:'application/msword'})
 

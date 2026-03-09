@@ -1,62 +1,120 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Конструктор апелляционной жалобы</title>
-    <link rel="stylesheet" href="styles.css" />
-  </head>
-  <body>
-    <main class="container">
-      <h1>Составление апелляционной жалобы</h1>
-      <p class="subtitle">Заполните форму и нажмите «Сформировать документ».</p>
+<head>
+<meta charset="UTF-8">
+<title>Конструктор апелляционной жалобы</title>
 
-      <form id="appeal-form" class="appeal-form">
-        <label for="court">Данные суда</label>
-        <textarea id="court" name="court" rows="3" placeholder="Например: Московский городской суд" required></textarea>
+<style>
+body{
+font-family: "Times New Roman", serif;
+font-size:14px;
+max-width:900px;
+margin:40px auto;
+}
 
-        <label for="defendant">Данные подсудимого</label>
-        <textarea id="defendant" name="defendant" rows="3" placeholder="ФИО, дата рождения, адрес" required></textarea>
+h1{
+text-align:center;
+}
 
-        <label for="case-number">Номер дела</label>
-        <input id="case-number" name="caseNumber" type="text" placeholder="Например: 12-345/2026" required />
+form{
+margin-bottom:30px;
+}
 
-        <label for="complaint-text">Текст жалобы</label>
-        <textarea id="complaint-text" name="complaintText" rows="8" placeholder="Изложите доводы апелляционной жалобы" required></textarea>
+textarea,input{
+width:100%;
+margin-bottom:10px;
+font-size:14px;
+}
 
-        <button type="submit">Сформировать документ</button>
-      </form>
+button{
+padding:10px 20px;
+font-size:16px;
+}
 
-      <section class="result" aria-live="polite">
-        <h2>Сформированный документ</h2>
-        <pre id="output">Пока документ не сформирован.</pre>
-      </section>
-    </main>
+#output{
+margin-top:30px;
+white-space:pre-wrap;
+text-align:justify;
+}
+</style>
 
-    <script>
-document.getElementById("appeal-form").addEventListener("submit", function(e) {
-  e.preventDefault();
+</head>
 
-  const court = document.getElementById("court").value;
-  const defendant = document.getElementById("defendant").value;
-  const caseNumber = document.getElementById("case-number").value;
-  const complaintText = document.getElementById("complaint-text").value;
+<body>
 
-  const result = `
+<h1>Конструктор апелляционной жалобы</h1>
+
+<form id="form">
+
+<label>Суд первой инстанции</label>
+<input id="court">
+
+<label>ФИО подзащитного</label>
+<input id="defendant">
+
+<label>Номер дела</label>
+<input id="case">
+
+<label>Доводы жалобы</label>
+<textarea id="text" rows="8"></textarea>
+
+<button type="button" onclick="generate()">Сформировать документ</button>
+
+</form>
+
+<div id="output"></div>
+
+<script>
+
+function generate(){
+
+let court=document.getElementById("court").value
+let defendant=document.getElementById("defendant").value
+let caseNumber=document.getElementById("case").value
+let text=document.getElementById("text").value
+
+let doc=`
+В Судебную коллегию по уголовным делам
+Московского городского суда
+107076, г. Москва, Богородский вал, д. 8
+
+через ${court}
+
+от адвоката
+Адамова Тажиба Таривердиевича
+регистрационный номер в реестре адвокатов
+АП г. Москвы № 77/9954
+тел.: +7 (967) 019-78-24
+email: adamovtt@yandex.ru
+
+
 АПЕЛЛЯЦИОННАЯ ЖАЛОБА
 
-В суд: ${court}
 
-Подсудимый: ${defendant}
+по уголовному делу № ${caseNumber}
 
-Номер дела: ${caseNumber}
 
-ДОВОДЫ ЖАЛОБЫ:
+В отношении: ${defendant}
 
-${complaintText}
-`;
 
-  document.getElementById("output").textContent = result;
-});
-</script>  </body>
+${text}
+
+
+ПРОШУ:
+
+отменить судебное решение суда первой инстанции
+и принять законное и обоснованное решение.
+
+
+Адвокат
+Адамов Т.Т.
+`
+
+document.getElementById("output").innerText=doc
+
+}
+
+</script>
+
+</body>
 </html>

@@ -146,6 +146,11 @@ button{
   </div>
 
   <div class="full">
+    <label for="criminalArticle">Статья УК РФ / предмет жалобы</label>
+    <input id="criminalArticle" placeholder="Например: ч. 4 ст. 159 УК РФ">
+  </div>
+
+  <div class="full">
     <label for="titleText">Краткое наименование обжалуемого решения / предмета жалобы</label>
     <input id="titleText">
   </div>
@@ -163,6 +168,11 @@ button{
   <div class="full">
     <label for="lawRefs">Статьи УПК РФ перед словом «ПРОШУ»</label>
     <input id="lawRefs">
+  </div>
+
+  <div class="full">
+    <label for="requestVariant">Вариант просительной части</label>
+    <select id="requestVariant"></select>
   </div>
 
   <div class="full">
@@ -275,8 +285,7 @@ const presets = {
     title: "АПЕЛЛЯЦИОННАЯ ЖАЛОБА",
     subtitle: "на приговор суда",
     lawRefs: "ст. 389.1, 389.13, 389.15, 389.18, 389.20, 389.28 УПК РФ",
-    arguments: "Приговор является незаконным, необоснованным и подлежащим отмене либо изменению. Выводы суда не соответствуют фактическим обстоятельствам дела. Доказательства оценены односторонне, доводы защиты надлежащей оценки не получили.",
-    request: "Приговор суда отменить либо изменить. Принять по делу законное, обоснованное и справедливое решение."
+    arguments: "Выводы суда первой инстанции не соответствуют фактическим обстоятельствам уголовного дела. Судом допущены существенные нарушения уголовного и уголовно-процессуального закона. Доказательства стороны защиты не получили надлежащей оценки, отдельные выводы суда носят предположительный характер."
   },
   appeal_detention: {
     targetCourt: "В Судебную коллегию по уголовным делам Московского городского суда",
@@ -284,8 +293,7 @@ const presets = {
     title: "АПЕЛЛЯЦИОННАЯ ЖАЛОБА",
     subtitle: "на постановление об избрании меры пресечения в виде заключения под стражу",
     lawRefs: "ст. 97, 99, 108, 389.1, 389.13, 389.15, 389.20, 389.28 УПК РФ",
-    arguments: "Постановление суда является незаконным и необоснованным. Суд не привел достаточных конкретных данных, подтверждающих наличие рисков, предусмотренных статьей 97 УПК РФ. Не проверена возможность применения более мягкой меры пресечения.",
-    request: "Постановление суда отменить. Избрать в отношении подзащитного более мягкую меру пресечения, не связанную с заключением под стражу."
+    arguments: "Постановление суда является незаконным и необоснованным. Суд не привел достаточных конкретных данных, подтверждающих наличие рисков, предусмотренных статьей 97 УПК РФ. Не проверена возможность применения более мягкой меры пресечения."
   },
   appeal_extend: {
     targetCourt: "В Судебную коллегию по уголовным делам Московского городского суда",
@@ -293,8 +301,7 @@ const presets = {
     title: "АПЕЛЛЯЦИОННАЯ ЖАЛОБА",
     subtitle: "на постановление о продлении срока содержания под стражей",
     lawRefs: "ст. 97, 99, 109, 389.1, 389.13, 389.15, 389.20, 389.28 УПК РФ",
-    arguments: "Постановление суда является незаконным и необоснованным. Судом не приведено новых обстоятельств, оправдывающих дальнейшее содержание лица под стражей. Возможность применения более мягкой меры пресечения судом надлежащим образом не проверена.",
-    request: "Постановление суда о продлении срока содержания под стражей отменить. Избрать более мягкую меру пресечения."
+    arguments: "Постановление суда является незаконным и необоснованным. Судом не приведено новых обстоятельств, оправдывающих дальнейшее содержание лица под стражей. Возможность применения более мягкой меры пресечения судом надлежащим образом не проверена."
   },
   complaint_125: {
     targetCourt: "В районный суд",
@@ -302,26 +309,32 @@ const presets = {
     title: "ЖАЛОБА",
     subtitle: "в порядке статьи 125 УПК РФ",
     lawRefs: "ст. 123, 125 УПК РФ",
-    arguments: "Оспариваемые действия (бездействие) либо решение являются незаконными и необоснованными, нарушают права заявителя и затрудняют доступ к правосудию.",
-    request: "Признать действия (бездействие) либо решение незаконными и необоснованными. Обязать устранить допущенное нарушение."
+    arguments: "Оспариваемые действия (бездействие) либо решение являются незаконными и необоснованными, нарушают права заявителя и затрудняют доступ к правосудию."
   }
 };
 
-function buildFacts(type, throughCourt, clientName){
+function buildInterestLine(clientStatus, clientName){
+  if(clientStatus && clientName) return `в защиту интересов ${clientStatus} ${clientName}`;
+  if(clientName) return `в защиту интересов ${clientName}`;
+  return "";
+}
+
+function buildFacts(type, throughCourt, clientName, criminalArticle){
   const inst = courtInstrumental(throughCourt);
   const gen = courtGenitive(throughCourt);
   const person = clientName || "подзащитного";
+  const article = criminalArticle ? `, предусмотренного ${criminalArticle}` : "";
 
   if(type === "appeal_verdict"){
-    return `Приговором ${inst} лицо признано виновным в совершении инкриминируемого деяния. С выводами ${gen} сторона защиты не согласна.`;
+    return `Приговором ${inst} от «___» __________ 2026 г. ${person} признан виновным в совершении преступления${article}. С указанным приговором сторона защиты не согласна, считает его незаконным, необоснованным и подлежащим отмене либо изменению по следующим основаниям.`;
   }
 
   if(type === "appeal_detention"){
-    return `Постановлением ${inst} в отношении ${person} избрана мера пресечения в виде заключения под стражу. С данным постановлением ${gen} сторона защиты не согласна.`;
+    return `Постановлением ${inst} от «___» __________ 2026 г. в отношении ${person} избрана мера пресечения в виде заключения под стражу. С данным постановлением ${gen} сторона защиты не согласна.`;
   }
 
   if(type === "appeal_extend"){
-    return `Постановлением ${inst} продлен срок содержания ${person} под стражей. С данным постановлением ${gen} сторона защиты не согласна.`;
+    return `Постановлением ${inst} от «___» __________ 2026 г. продлен срок содержания ${person} под стражей. С данным постановлением ${gen} сторона защиты не согласна.`;
   }
 
   if(type === "complaint_125"){
@@ -329,6 +342,60 @@ function buildFacts(type, throughCourt, clientName){
   }
 
   return "";
+}
+
+function buildRequestOptions(type, throughCourt, clientName){
+  const courtGen = courtGenitive(throughCourt);
+  const person = clientName || "подзащитного";
+
+  if(type === "appeal_verdict"){
+    return [
+      `приговор ${courtGen} от «___» __________ 2026 г. в отношении ${person} отменить и направить уголовное дело на новое судебное разбирательство в тот же суд в ином составе суда.`,
+      `приговор ${courtGen} от «___» __________ 2026 г. в отношении ${person} изменить, смягчив назначенное наказание.`,
+      `приговор ${courtGen} от «___» __________ 2026 г. в отношении ${person} отменить и постановить оправдательный приговор.`
+    ];
+  }
+
+  if(type === "appeal_detention"){
+    return [
+      `постановление ${courtGen} от «___» __________ 2026 г. об избрании в отношении ${person} меры пресечения в виде заключения под стражу отменить.\n\nИзбрать в отношении ${person} иную, более мягкую меру пресечения, не связанную с заключением под стражу.`,
+      `постановление ${courtGen} от «___» __________ 2026 г. об избрании в отношении ${person} меры пресечения в виде заключения под стражу отменить.\n\nИзбрать в отношении ${person} меру пресечения в виде домашнего ареста.`,
+      `постановление ${courtGen} от «___» __________ 2026 г. об избрании в отношении ${person} меры пресечения в виде заключения под стражу отменить.\n\nИзбрать в отношении ${person} меру пресечения в виде запрета определенных действий.`
+    ];
+  }
+
+  if(type === "appeal_extend"){
+    return [
+      `постановление ${courtGen} от «___» __________ 2026 г. о продлении срока содержания под стражей в отношении ${person} отменить.\n\nИзбрать в отношении ${person} иную, более мягкую меру пресечения.`,
+      `постановление ${courtGen} от «___» __________ 2026 г. о продлении срока содержания под стражей в отношении ${person} отменить.\n\nОтказать в удовлетворении ходатайства следствия о продлении срока содержания под стражей.`,
+      `постановление ${courtGen} от «___» __________ 2026 г. о продлении срока содержания под стражей в отношении ${person} отменить.\n\nИзбрать в отношении ${person} меру пресечения в виде домашнего ареста.`
+    ];
+  }
+
+  if(type === "complaint_125"){
+    return [
+      `признать оспариваемые действия (бездействие) либо решение незаконными и необоснованными.\n\nОбязать соответствующее должностное лицо устранить допущенное нарушение.`,
+      `признать отказ незаконным и необоснованным.\n\nОбязать соответствующее должностное лицо повторно рассмотреть заявление (ходатайство) в установленном законом порядке.`
+    ];
+  }
+
+  return [""];
+}
+
+function fillRequestVariantOptions(){
+  const type = document.getElementById("docType").value;
+  const throughCourt = document.getElementById("throughCourt").value.trim();
+  const clientName = document.getElementById("clientName").value.trim();
+  const options = buildRequestOptions(type, throughCourt, clientName);
+  const select = document.getElementById("requestVariant");
+  select.innerHTML = "";
+
+  options.forEach((item, index) => {
+    const opt = document.createElement("option");
+    opt.value = item;
+    opt.textContent = "Вариант " + (index + 1);
+    select.appendChild(opt);
+  });
 }
 
 function esc(str){
@@ -339,7 +406,7 @@ function esc(str){
 }
 
 function br(str){
-  return esc(str).replace(/\\n/g,"<br>");
+  return esc(str).replace(/\n/g,"<br>");
 }
 
 function applyPreset(){
@@ -347,21 +414,17 @@ function applyPreset(){
   const p = presets[type];
   const throughCourt = document.getElementById("throughCourt").value.trim();
   const clientName = document.getElementById("clientName").value.trim();
-  const clientStatus = document.getElementById("clientStatus").value.trim();
+  const criminalArticle = document.getElementById("criminalArticle").value.trim();
 
   document.getElementById("targetCourt").value = p.targetCourt;
   document.getElementById("targetAddress").value = p.targetAddress;
   document.getElementById("titleText").value = p.subtitle;
-  document.getElementById("facts").value = buildFacts(type, throughCourt, clientName);
+  document.getElementById("facts").value = buildFacts(type, throughCourt, clientName, criminalArticle);
   document.getElementById("arguments").value = p.arguments;
   document.getElementById("lawRefs").value = p.lawRefs;
-  document.getElementById("requestText").value = p.request;
-}
 
-function buildInterestLine(clientStatus, clientName){
-  if(clientStatus && clientName) return `в защиту интересов ${clientStatus} ${clientName}`;
-  if(clientName) return `в защиту интересов ${clientName}`;
-  return "";
+  fillRequestVariantOptions();
+  document.getElementById("requestText").value = document.getElementById("requestVariant").value;
 }
 
 function buildPlain(){
@@ -381,38 +444,38 @@ function buildPlain(){
 
   let t = "";
 
-  if(targetCourt) t += targetCourt + "\\n";
-  if(targetAddress) t += targetAddress + "\\n";
-  t += "\\n";
+  if(targetCourt) t += targetCourt + "\n";
+  if(targetAddress) t += targetAddress + "\n";
+  t += "\n";
 
-  if(throughCourt) t += "через " + throughCourt + "\\n";
-  if(caseNumber) t += "по уголовному делу № " + caseNumber + "\\n";
+  if(throughCourt) t += "через " + throughCourt + "\n";
+  if(caseNumber) t += "по уголовному делу № " + caseNumber + "\n";
 
   const interestLine = buildInterestLine(clientStatus, clientName);
-  if(interestLine) t += interestLine + "\\n";
-  t += "\\n";
+  if(interestLine) t += interestLine + "\n";
+  t += "\n";
 
-  t += "от адвоката\\n";
-  t += lawyer.name + "\\n";
-  t += "Регистрационный номер в реестре адвокатов АП г. Москвы " + lawyer.registry + "\\n";
-  t += "адрес для корреспонденции: " + lawyer.address + "\\n";
-  t += "тел.: " + lawyer.phone + "\\n";
-  t += "e-mail: " + lawyer.email + "\\n\\n";
+  t += "от адвоката\n";
+  t += lawyer.name + "\n";
+  t += "Регистрационный номер в реестре адвокатов АП г. Москвы " + lawyer.registry + "\n";
+  t += "адрес для корреспонденции: " + lawyer.address + "\n";
+  t += "тел.: " + lawyer.phone + "\n";
+  t += "e-mail: " + lawyer.email + "\n\n";
 
-  t += p.title + "\\n";
-  if(titleText) t += titleText + "\\n";
-  t += "\\n";
+  t += p.title + "\n";
+  if(titleText) t += titleText + "\n";
+  t += "\n";
 
-  if(facts) t += facts + "\\n\\n";
-  if(argumentsText) t += argumentsText + "\\n\\n";
+  if(facts) t += facts + "\n\n";
+  if(argumentsText) t += argumentsText + "\n\n";
 
   if(lawRefs){
-    t += "На основании изложенного и руководствуясь " + lawRefs + ",\\n\\n";
+    t += "На основании изложенного и руководствуясь " + lawRefs + ",\n\n";
   }
 
-  t += "ПРОШУ:\\n\\n";
-  t += requestText + "\\n\\n";
-  t += "Дата: «___» __________ 2026 г.\\n\\n";
+  t += "ПРОШУ:\n\n";
+  t += requestText + "\n\n";
+  t += "Дата: «___» __________ 2026 г.\n\n";
   t += "Адвокат __________ Адамов Т.Т.";
 
   return t;
@@ -491,6 +554,10 @@ document.getElementById("fillBtn").addEventListener("click", applyPreset);
 document.getElementById("docType").addEventListener("change", applyPreset);
 document.getElementById("throughCourt").addEventListener("input", applyPreset);
 document.getElementById("clientName").addEventListener("input", applyPreset);
+document.getElementById("criminalArticle").addEventListener("input", applyPreset);
+document.getElementById("requestVariant").addEventListener("change", function(){
+  document.getElementById("requestText").value = this.value;
+});
 
 document.getElementById("buildBtn").addEventListener("click", function(){
   document.getElementById("preview").innerText = buildPlain();

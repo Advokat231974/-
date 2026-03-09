@@ -33,6 +33,30 @@
       </section>
     </main>
 
-    <script src="script.js"></script>
-  </body>
+    <script>
+document.getElementById("appeal-form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const court = document.getElementById("court").value;
+  const defendant = document.getElementById("defendant").value;
+  const caseNumber = document.getElementById("case-number").value;
+  const complaintText = document.getElementById("complaint-text").value;
+
+  const result = `
+АПЕЛЛЯЦИОННАЯ ЖАЛОБА
+
+В суд: ${court}
+
+Подсудимый: ${defendant}
+
+Номер дела: ${caseNumber}
+
+ДОВОДЫ ЖАЛОБЫ:
+
+${complaintText}
+`;
+
+  document.getElementById("output").textContent = result;
+});
+</script>  </body>
 </html>

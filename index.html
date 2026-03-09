@@ -105,7 +105,7 @@ button{
 
   <div>
     <label for="clientStatus">Процессуальный статус</label>
-    <input id="clientStatus" placeholder="Например: обвиняемый / подозреваемый / заявитель">
+    <input id="clientStatus" placeholder="Например: обвиняемого / подозреваемого / заявителя">
   </div>
 
   <div class="full">
@@ -121,6 +121,11 @@ button{
   <div class="full">
     <label for="arguments">Доводы</label>
     <textarea id="arguments"></textarea>
+  </div>
+
+  <div class="full">
+    <label for="lawRefs">Статьи УПК РФ перед словом «ПРОШУ»</label>
+    <input id="lawRefs" placeholder="Например: ст. 389.1, 389.13, 389.15 УПК РФ">
   </div>
 
   <div class="full">
@@ -150,6 +155,7 @@ const presets = {
     subtitle: "на приговор суда",
     facts: "Приговором суда лицо признано виновным в совершении инкриминируемого деяния. С выводами суда сторона защиты не согласна.",
     arguments: "Приговор является незаконным, необоснованным и подлежащим отмене либо изменению. Выводы суда не соответствуют фактическим обстоятельствам дела. Доказательства оценены односторонне, доводы защиты надлежащей оценки не получили.",
+    lawRefs: "ст. 389.1, 389.13, 389.15 УПК РФ",
     request: "Приговор суда отменить либо изменить. Принять по делу законное, обоснованное и справедливое решение."
   },
   appeal_detention: {
@@ -157,6 +163,7 @@ const presets = {
     subtitle: "на постановление суда об избрании меры пресечения в виде заключения под стражу",
     facts: "Постановлением суда в отношении подзащитного избрана мера пресечения в виде заключения под стражу. Защита с данным решением не согласна.",
     arguments: "Постановление суда является незаконным и необоснованным. Суд не привел достаточных конкретных данных, подтверждающих наличие рисков, предусмотренных статьей 97 УПК РФ. Не проверена возможность применения более мягкой меры пресечения.",
+    lawRefs: "ст. 97, 99, 108, 389.1, 389.13, 389.15 УПК РФ",
     request: "Постановление суда отменить. Избрать в отношении подзащитного более мягкую меру пресечения, не связанную с заключением под стражу."
   },
   appeal_extend: {
@@ -164,6 +171,7 @@ const presets = {
     subtitle: "на постановление суда о продлении срока содержания под стражей",
     facts: "Постановлением суда продлен срок содержания под стражей. Защита считает данное решение незаконным и необоснованным.",
     arguments: "Судом не приведено новых обстоятельств, оправдывающих дальнейшее содержание лица под стражей. Риски, на которые ссылается сторона обвинения, не подтверждены конкретными материалами. Возможность применения более мягкой меры пресечения судом надлежащим образом не проверена.",
+    lawRefs: "ст. 97, 99, 109, 389.1, 389.13, 389.15 УПК РФ",
     request: "Постановление суда о продлении срока содержания под стражей отменить. Избрать более мягкую меру пресечения."
   },
   complaint_125: {
@@ -171,6 +179,7 @@ const presets = {
     subtitle: "в порядке статьи 125 УПК РФ",
     facts: "В ходе досудебного производства были допущены действия (бездействие) либо принято решение, нарушающее права и законные интересы заявителя.",
     arguments: "Оспариваемые действия (бездействие) либо решение являются незаконными и необоснованными, нарушают права заявителя и затрудняют доступ к правосудию.",
+    lawRefs: "ст. 123, 125 УПК РФ",
     request: "Признать действия (бездействие) либо решение незаконными и необоснованными. Обязать устранить допущенное нарушение."
   }
 };
@@ -191,6 +200,7 @@ function applyPreset(){
   document.getElementById('titleText').value = p.subtitle;
   document.getElementById('facts').value = p.facts;
   document.getElementById('arguments').value = p.arguments;
+  document.getElementById('lawRefs').value = p.lawRefs;
   document.getElementById('requestText').value = p.request;
 }
 
@@ -206,13 +216,19 @@ function buildPlain(){
   const titleText = document.getElementById('titleText').value.trim();
   const facts = document.getElementById('facts').value.trim();
   const argumentsText = document.getElementById('arguments').value.trim();
+  const lawRefs = document.getElementById('lawRefs').value.trim();
   const requestText = document.getElementById('requestText').value.trim();
 
   let t = "";
+
   if(targetCourt) t += targetCourt + "\n";
   if(targetAddress) t += targetAddress + "\n";
   t += "\n";
-  if(throughCourt) t += throughCourt + "\n\n";
+
+  if(throughCourt) t += throughCourt + "\n";
+  if(caseNumber) t += "по уголовному делу № " + caseNumber + "\n";
+  if(clientName) t += "в защиту интересов: " + clientName + "\n";
+  t += "\n";
 
   t += "от адвоката\n";
   t += lawyer.name + "\n";
@@ -221,23 +237,21 @@ function buildPlain(){
   t += "тел.: " + lawyer.phone + "\n";
   t += "e-mail: " + lawyer.email + "\n\n";
 
-  if(clientStatus || clientName){
-    t += "в интересах: " + (clientStatus ? clientStatus + " " : "") + clientName + "\n\n";
-  }
-
   t += p.title + "\n";
   if(titleText) t += titleText + "\n";
   t += "\n";
 
-  if(caseNumber) t += "по делу / материалу № " + caseNumber + "\n\n";
-  if(clientName) t += "В отношении: " + clientName + "\n\n";
   if(facts) t += facts + "\n\n";
   if(argumentsText) t += argumentsText + "\n\n";
 
+  if(lawRefs){
+    t += "На основании изложенного и руководствуясь " + lawRefs + ",\n\n";
+  }
+
   t += "ПРОШУ:\n\n";
   t += requestText + "\n\n";
-  t += "Дата: ____________\n\n";
-  t += "Адвокат\nАдамов Т.Т.";
+  t += "Дата: «___» __________ 2026 г.\n\n";
+  t += "Адвокат __________ Адамов Т.Т.";
 
   return t;
 }
@@ -250,10 +264,10 @@ function buildHtmlForWord(){
   const throughCourt = document.getElementById('throughCourt').value.trim();
   const caseNumber = document.getElementById('caseNumber').value.trim();
   const clientName = document.getElementById('clientName').value.trim();
-  const clientStatus = document.getElementById('clientStatus').value.trim();
   const titleText = document.getElementById('titleText').value.trim();
   const facts = document.getElementById('facts').value.trim();
   const argumentsText = document.getElementById('arguments').value.trim();
+  const lawRefs = document.getElementById('lawRefs').value.trim();
   const requestText = document.getElementById('requestText').value.trim();
 
   return `
@@ -281,6 +295,8 @@ body{
   ${targetCourt ? `<p class="right">${br(targetCourt)}</p>` : ``}
   ${targetAddress ? `<p class="right">${br(targetAddress)}</p>` : ``}
   ${throughCourt ? `<p class="right">${br(throughCourt)}</p>` : ``}
+  ${caseNumber ? `<p class="right">по уголовному делу № ${esc(caseNumber)}</p>` : ``}
+  ${clientName ? `<p class="right">в защиту интересов: ${esc(clientName)}</p>` : ``}
 
   <p class="right">от адвоката<br>
   ${esc(lawyer.name)}<br>
@@ -289,21 +305,19 @@ body{
   тел.: ${esc(lawyer.phone)}<br>
   e-mail: ${esc(lawyer.email)}</p>
 
-  ${(clientStatus || clientName) ? `<p class="right">в интересах: ${esc((clientStatus ? clientStatus + " " : "") + clientName)}</p>` : ``}
-
   <p class="center"><b>${esc(p.title)}</b></p>
   ${titleText ? `<p class="center"><b>${br(titleText)}</b></p>` : ``}
 
-  ${caseNumber ? `<p class="p">по делу / материалу № ${esc(caseNumber)}</p>` : ``}
-  ${clientName ? `<p class="p">В отношении: ${esc(clientName)}</p>` : ``}
   ${facts ? `<p class="p">${br(facts)}</p>` : ``}
   ${argumentsText ? `<p class="p">${br(argumentsText)}</p>` : ``}
+
+  ${lawRefs ? `<p class="p">На основании изложенного и руководствуясь ${esc(lawRefs)},</p>` : ``}
 
   <p class="ask">ПРОШУ:</p>
   <p class="p">${br(requestText)}</p>
 
-  <p class="noindent">Дата: ____________</p>
-  <p class="noindent">Адвокат<br>Адамов Т.Т.</p>
+  <p class="noindent">Дата: «___» __________ 2026 г.</p>
+  <p class="noindent">Адвокат __________ Адамов Т.Т.</p>
 </body>
 </html>`;
 }

@@ -115,6 +115,54 @@ document.getElementById("output").innerText=doc
 }
 
 </script>
+<script>
+function generateDoc() {
 
-</body>
+let court = document.getElementById("court").value;
+let defendant = document.getElementById("defendant").value;
+let caseNumber = document.getElementById("case-number").value;
+let text = document.getElementById("complaint-text").value;
+
+let doc = `
+В Судебную коллегию по уголовным делам
+Московского городского суда
+
+через ${court}
+
+от адвоката Адамова Тажиба Таривердиевича
+регистрационный номер в реестре адвокатов АП г. Москвы 77/9954
+тел.: +7 (967) 019-78-24
+email: adamovtt@yandex.ru
+
+
+                    АПЕЛЛЯЦИОННАЯ ЖАЛОБА
+
+
+по уголовному делу № ${caseNumber}
+
+В отношении: ${defendant}
+
+
+${text}
+
+
+ПРОШУ:
+
+отменить судебное решение суда первой инстанции
+и принять законное и обоснованное решение.
+
+
+Адвокат
+Адамов Т.Т.
+`;
+
+let blob = new Blob(['\ufeff', doc], {type:'application/msword'});
+
+let link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+link.download = "apellyacionnaya_zhaloba.doc";
+link.click();
+
+}
+</script></body>
 </html>
